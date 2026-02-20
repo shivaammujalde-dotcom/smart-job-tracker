@@ -26,11 +26,6 @@ app.get('/', (_req, res) => {
   res.send('Smart Job Tracker API is running');
 });
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
 
 // Protected route
 app.get('/api/protected', protect, (req, res) => {
@@ -39,3 +34,23 @@ app.get('/api/protected', protect, (req, res) => {
 
 // Dashboard route
 app.use('/api/dashboard', dashboardRoutes);
+
+
+const PORT = process.env.PORT || 5000;
+
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
+
