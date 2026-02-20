@@ -7,10 +7,10 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import protect from './middleware/authMiddleware.js';
 import jobRoutes from './routes/jobRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
@@ -36,3 +36,6 @@ app.listen(PORT, () => {
 app.get('/api/protected', protect, (req, res) => {
   res.json({ message: 'This is a protected route', user: req.user });
 });
+
+// Dashboard route
+app.use('/api/dashboard', dashboardRoutes);
