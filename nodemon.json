@@ -1,0 +1,18 @@
+{
+  "watch": ["server"],
+  "ext": "js,mjs,cjs",
+  "delay": "700",
+  "ignore": [
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    "src",
+    "public",
+    "server/.env",
+    "server/README.md",
+    "**/*.tmp",
+    "**/desktop.ini",
+    "**/Thumbs.db"
+  ]
+}
