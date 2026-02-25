@@ -1,118 +1,64 @@
 # Smart Job Tracker
 
-Smart Job Tracker is a full-stack job application tracking app.
-The backend is built with Express and MongoDB, and the frontend is built with React + Vite.
+Production-ready MERN-style job tracker with JWT auth, protected routes, live dashboard stats, and modern responsive UI.
 
-## Features
+## What is included
 
-- User authentication with JWT
-- Add, update, delete job applications
-- Track status (Applied, Interview, Offer, Rejected)
-- Dashboard APIs for summary metrics
-- Docker support for backend deployment
+- Register/login with token persistence
+- Protected dashboard route
+- Create, edit, delete job applications
+- Search, status filter, sorting, pagination
+- Dashboard stat cards from backend aggregate API
+- Responsive polished interface for portfolio/demo use
 
-## Tech Stack
+## Tech stack
 
-- Node.js
-- Express.js
-- MongoDB + Mongoose
-- React
-- Vite
-- Docker
+- React + Vite + Tailwind utility layer
+- Express + MongoDB + Mongoose
+- JWT authentication
 
-## Project Structure
+## Setup
 
-```text
-smart-job-tracker/
-|-- client/
-|-- public/
-|-- server/
-|   |-- config/
-|   |-- controllers/
-|   |-- middleware/
-|   |-- models/
-|   |-- routes/
-|   `-- server.js
-|-- src/
-|-- Dockerfile
-|-- .dockerignore
-|-- package.json
-`-- README.md
-```
-
-## Local Development
-
-1. Install dependencies:
+1. Install dependencies
 
 ```bash
 npm install
 ```
 
-2. Create environment file:
-
-- Create `server/.env`
-- Add required values:
+2. Create `server/.env`
 
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
+MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
 ```
 
-3. Start backend:
+3. Optional frontend env (`.env` at project root)
 
-```bash
-npm run dev
+```env
+VITE_API_BASE_URL=http://localhost:5000
 ```
 
-4. (Optional) Start frontend (if used separately):
+4. Run backend and frontend in two terminals
 
 ```bash
+npm run dev:server
 npm run client
 ```
 
-## Production Start
-
-```bash
-npm start
-```
-
-## Docker
-
-Build image:
-
-```bash
-docker build -t smart-job-tracker .
-```
-
-Run container:
-
-```bash
-docker run --env-file server/.env -p 5000:5000 smart-job-tracker
-```
-
-## Render Deployment (Docker)
-
-1. Push code to GitHub.
-2. In Render, create a new Web Service.
-3. Select repository and choose `Docker` runtime.
-4. Keep Dockerfile path as `Dockerfile`.
-5. Add environment variables (`MONGO_URI`, `JWT_SECRET`, etc.).
-6. Deploy.
-
-## API Base URL
-
-- Local: `http://localhost:5000`
-- Health route: `GET /`
-
 ## Scripts
 
-- `npm run dev` - run backend with nodemon
-- `npm start` - run backend with node
-- `npm run client` - start Vite dev server
-- `npm run build` - build frontend
-- `npm run lint` - run ESLint
+- `npm run client` - Vite frontend
+- `npm run dev:server` - nodemon backend
+- `npm run build` - production frontend build
+- `npm run lint` - ESLint
 
-## License
+## API routes used by frontend
 
-ISC
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/dashboard`
+- `GET /api/jobs`
+- `POST /api/jobs`
+- `PUT /api/jobs/:id`
+- `DELETE /api/jobs/:id`
