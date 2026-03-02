@@ -1,90 +1,79 @@
-import Job from '../models/Job.js';
+import Job from "../models/Job.js";
 
 export const getDashboard = async (req, res) => {
   try {
-    const stats = await Job.aggregate([
-      {
-        $match: { user: req.user._id },
-      },
-      {
-        $group: {
-          _id: '$status',
-          count: { $sum: 1 },
-        },
-      },
-    ]);
+    const userId = req.user._id;
+    const jobs = await Job.find({ user: userId }).select("status");
 
-    const formattedStats = {
-      total: 0,
+    const summary = {
+      total: jobs.length,
       applied: 0,
       interviewing: 0,
       offered: 0,
       rejected: 0,
     };
 
-    stats.forEach((item) => {
-      formattedStats.total += item.count;
-      const key = item._id.toLowerCase();
-      formattedStats[key] = item.count;
+    jobs.forEach((job) => {
+      const status = job.status;
+      if (status === "Applied") summary.applied += 1;
+      if (status === "Interviewing") summary.interviewing += 1;
+      if (status === "Offered") summary.offered += 1;
+      if (status === "Rejected") summary.rejected += 1;
     });
 
-    return res.json(formattedStats);
+    return res.status(200).json(summary);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-
 export const getMonthlyApplications = async (req, res) => {
   try {
-    const monthlyApplications = await Job.aggregate([
-      {
-        $match: { user: req.user._id },
-      },
+    const userId = req.user._id;
+
+    const monthly = await Job.aggregate([
+      { $match: { user: userId } },
       {
         $group: {
           _id: {
-            year: { $year: '$createdAt' },
-            month: { $month: '$createdAt' },
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
           },
           count: { $sum: 1 },
         },
       },
-      { $sort: { '_id.year': -1, '_id.month': -1 } },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    const formatted = monthlyApplications.map((item) => {
-      const date = new Date(item._id.year, item._id.month - 1);
-      const month = date.toLocaleDateString('default', {
-        month: 'short',
-        year: 'numeric',
-      });
-      return { month, count: item.count };
-    });
-
-    return res.json(formatted);
+    return res.status(200).json({ monthly });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
 export const getConversionStats = async (req, res) => {
   try {
-    const jobs = await Job.find({ user: req.user._id });
+    const userId = req.user._id;
 
-    const total = jobs.length;
-    const interview = jobs.filter((job) => job.status === 'Interviewing').length;
-    const offer = jobs.filter((job) => job.status === 'Offered').length;
+    const [total, offered, interviewing] = await Promise.all([
+      Job.countDocuments({ user: userId }),
+      Job.countDocuments({ user: userId, status: "Offered" }),
+      Job.countDocuments({ user: userId, status: "Interviewing" }),
+    ]);
 
-    const interviewRate = total > 0 ? ((interview / total) * 100).toFixed(2) : 0;
-    const offerRate = total > 0 ? ((offer / total) * 100).toFixed(2) : 0;
+    const offerRate = total ? Number(((offered / total) * 100).toFixed(2)) : 0;
+    const interviewRate = total
+      ? Number(((interviewing / total) * 100).toFixed(2))
+      : 0;
 
-    return res.json({
-      totalApplications: total,
-      interviewRate: `${interviewRate}%`,
-      offerRate: `${offerRate}%`,
+    return res.status(200).json({
+      total,
+      offered,
+      interviewing,
+      offerRate,
+      interviewRate,
     });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Server error" });
   }
 };

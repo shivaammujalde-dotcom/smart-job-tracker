@@ -1,26 +1,25 @@
-function StatsCard({ jobs = [] }) {
-  const total = jobs.length;
-  const applied = jobs.filter((j) => j.status === 'Applied').length;
-  const interviewing = jobs.filter((j) => j.status === 'Interviewing' || j.status === 'Interview').length;
-  const offered = jobs.filter((j) => j.status === 'Offered' || j.status === 'Offer').length;
+import CountUp from "react-countup";
+import { motion } from "framer-motion";
 
-  const cards = [
-    { title: 'Total', value: total, tone: 'bg-slate-800 text-white' },
-    { title: 'Applied', value: applied, tone: 'bg-cyan-900/40 text-cyan-100' },
-    { title: 'Interviewing', value: interviewing, tone: 'bg-amber-900/40 text-amber-100' },
-    { title: 'Offered', value: offered, tone: 'bg-emerald-900/40 text-emerald-100' },
-  ];
+export default function StatsCard({ title, value, icon, color }) {
+  const MotionDiv = motion.div;
 
   return (
-    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-      {cards.map((card) => (
-        <article key={card.title} className={`rounded-xl p-4 shadow ${card.tone}`}>
-          <p className="text-sm opacity-80">{card.title}</p>
-          <p className="mt-2 text-2xl font-bold">{card.value}</p>
-        </article>
-      ))}
-    </div>
+    <MotionDiv
+      whileHover={{ scale: 1.05 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center justify-between"
+    >
+      <div>
+        <h4 className="text-gray-500 dark:text-gray-300 text-sm">{title}</h4>
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mt-2">
+          <CountUp end={value} duration={1.5} />
+        </h2>
+      </div>
+
+      <div className={`p-4 rounded-full ${color}`}>{icon}</div>
+    </MotionDiv>
   );
 }
-
-export default StatsCard;
