@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes.js';
 import protect from './middleware/authMiddleware.js';
 import jobRoutes from './routes/jobRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import testRoutes from './routes/testRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +20,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes);
+app.use('/api/test', testRoutes);
+
 
 app.get('/', (_req, res) => {
   res.send('Smart Job Tracker API is running');

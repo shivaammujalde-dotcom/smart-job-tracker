@@ -1,4 +1,6 @@
+import { get } from 'mongoose';
 import Job from '../models/Job.js';
+import router from '../routes/jobRoutes.js';
 
 export const createJob = async (req, res) => {
   try {
@@ -25,7 +27,7 @@ export const getJobs = async (req, res) => {
     if (search) {
       queryObject.$or = [
         { company: { $regex: search, $options: 'i' } },
-        { role: { $regex: search, $options: 'i' } },
+        { position: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -60,7 +62,9 @@ export const getJobs = async (req, res) => {
       jobs,
     });
   } catch (error) {
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({
+  message: error.message,
+});
   }
 };
 
@@ -96,4 +100,6 @@ export const deleteJob = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
+
 };
+
