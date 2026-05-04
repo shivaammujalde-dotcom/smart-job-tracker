@@ -3,14 +3,21 @@ import Navbar from "./Navbar";
 
 export default function Layout({ children }) {
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-950">
+      
+      {/* Sidebar */}
       <Sidebar />
 
-      <div className="flex-1 bg-gray-100 dark:bg-gray-900 min-h-screen md:ml-[250px] pt-14 md:pt-0 transition-all duration-300">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        
+        {/* Navbar */}
         <Navbar />
-        <div className="p-6 md:p-8">
+
+        {/* Page Content */}
+        <main className="flex-1 p-6 overflow-y-auto">
           {children}
-        </div>
+        </main>
       </div>
     </div>
   );

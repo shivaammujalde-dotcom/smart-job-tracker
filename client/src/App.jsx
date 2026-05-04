@@ -1,21 +1,56 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/layout/Layout";
-import AddJob from "./pages/AddJob";
-import Applications from "./pages/Applications";
+
 import Dashboard from "./pages/Dashboard";
+import Applications from "./pages/Applications";
+import AddJob from "./pages/AddJob";
+import Analytics from "./pages/Analytics";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Analytics from "./pages/Analytics.jsx"
+import KanbanBoard from "./pages/KanbanBoard";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <BrowserRouter>
+    <ToastContainer
+  position="top-right"
+  autoClose={3000}
+  theme="colored"
+/>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
 
+        {/* Redirect */}
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to="/dashboard"
+              replace
+            />
+          }
+        />
+
+        {/* Public Routes */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
@@ -26,6 +61,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/applications"
           element={
@@ -36,6 +72,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/add-job"
           element={
@@ -46,10 +83,40 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/analytics" element={<Navigate to="/dashboard" replace />} />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/applications" element={<Applications />} />
-        <Route path="/analytics" element={<Analytics />} />
+
+       <Route
+  path="/analytics"
+  element={
+    <ProtectedRoute>
+      <Layout>
+        <Analytics />
+      </Layout>
+    </ProtectedRoute>
+  }
+/>
+
+        {/* 404 Redirect */}
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/dashboard"
+              replace
+            />
+          }
+        />
+
+        <Route
+  path="/kanban"
+  element={
+    <ProtectedRoute>
+      <Layout>
+        <KanbanBoard />
+      </Layout>
+    </ProtectedRoute>
+  }
+/>
+
       </Routes>
     </BrowserRouter>
   );
