@@ -1,6 +1,4 @@
-import { get } from 'mongoose';
 import Job from '../models/Job.js';
-import router from '../routes/jobRoutes.js';
 
 export const createJob = async (req, res) => {
   try {
@@ -27,6 +25,7 @@ export const getJobs = async (req, res) => {
     if (search) {
       queryObject.$or = [
         { company: { $regex: search, $options: 'i' } },
+        { role: { $regex: search, $options: 'i' } },
         { position: { $regex: search, $options: 'i' } },
       ];
     }
@@ -102,4 +101,3 @@ export const deleteJob = async (req, res) => {
   }
 
 };
-

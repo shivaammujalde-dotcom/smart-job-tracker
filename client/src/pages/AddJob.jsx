@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { jobsApi } from '../api';
+import { jobsApi } from '../api.js';
 import { useAuth } from '../context/AuthContext';
 
 export default function AddJob() {
@@ -24,9 +24,9 @@ export default function AddJob() {
         <input className="w-full rounded border p-2 dark:bg-gray-900 dark:text-white" placeholder="Role" value={role} onChange={(e) => setRole(e.target.value)} required />
         <select className="w-full rounded border p-2 dark:bg-gray-900 dark:text-white" value={status} onChange={(e) => setStatus(e.target.value)}>
           <option>Applied</option>
-          <option>Interviewing</option>
-          <option>Offered</option>
+          <option>Interview</option>
           <option>Rejected</option>
+          <option>Hired</option>
         </select>
         <button className="rounded bg-blue-600 px-4 py-2 text-white">Save</button>
       </form>

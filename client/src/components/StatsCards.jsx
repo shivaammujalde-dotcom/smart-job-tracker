@@ -2,21 +2,21 @@ export default function StatsCards({ jobs = [] }) {
   const total = jobs.length;
   const applied = jobs.filter((j) => j.status === "Applied").length;
   const interviewing = jobs.filter(
-    (j) => j.status === "Interviewing" || j.status === "Interview"
+    (j) => j.status === "Interview" || j.status === "Interviewing"
   ).length;
-  const offered = jobs.filter(
-    (j) => j.status === "Offered" || j.status === "Offer"
+  const hired = jobs.filter(
+    (j) => j.status === "Hired" || j.status === "Offered"
   ).length;
 
   const cards = [
     { title: "Total", value: total, tone: "bg-slate-800 text-white" },
     { title: "Applied", value: applied, tone: "bg-cyan-900/40 text-cyan-100" },
     {
-      title: "Interviewing",
+      title: "Interview",
       value: interviewing,
       tone: "bg-amber-900/40 text-amber-100",
     },
-    { title: "Offered", value: offered, tone: "bg-emerald-900/40 text-emerald-100" },
+    { title: "Hired", value: hired, tone: "bg-emerald-900/40 text-emerald-100" },
   ];
 
   return (

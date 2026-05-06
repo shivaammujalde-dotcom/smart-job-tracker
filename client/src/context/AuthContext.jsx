@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { authApi } from '../api';
+import { authApi } from '../api.js';
 
 const TOKEN_KEY = 'sjt_token';
 const USER_KEY = 'sjt_user';

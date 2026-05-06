@@ -1,6 +1,8 @@
 const STATUS_STYLES = {
   Applied: 'bg-cyan-500/20 text-cyan-200 border-cyan-400/30',
+  Interview: 'bg-amber-500/20 text-amber-200 border-amber-400/30',
   Interviewing: 'bg-amber-500/20 text-amber-200 border-amber-400/30',
+  Hired: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/30',
   Offered: 'bg-emerald-500/20 text-emerald-200 border-emerald-400/30',
   Rejected: 'bg-rose-500/20 text-rose-200 border-rose-400/30',
 };

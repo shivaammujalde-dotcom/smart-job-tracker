@@ -16,8 +16,8 @@ export const getDashboard = async (req, res) => {
     jobs.forEach((job) => {
       const status = job.status;
       if (status === "Applied") summary.applied += 1;
-      if (status === "Interviewing") summary.interviewing += 1;
-      if (status === "Offered") summary.offered += 1;
+      if (status === "Interviewing" || status === "Interview") summary.interviewing += 1;
+      if (status === "Offered" || status === "Hired") summary.offered += 1;
       if (status === "Rejected") summary.rejected += 1;
     });
 
@@ -57,8 +57,8 @@ export const getConversionStats = async (req, res) => {
 
     const [total, offered, interviewing] = await Promise.all([
       Job.countDocuments({ user: userId }),
-      Job.countDocuments({ user: userId, status: "Offered" }),
-      Job.countDocuments({ user: userId, status: "Interviewing" }),
+      Job.countDocuments({ user: userId, $or: [{ status: "Offered" }, { status: "Hired" }] }),
+      Job.countDocuments({ user: userId, $or: [{ status: "Interviewing" }, { status: "Interview" }] }),
     ]);
 
     const offerRate = total ? Number(((offered / total) * 100).toFixed(2)) : 0;

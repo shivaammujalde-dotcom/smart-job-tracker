@@ -15,6 +15,12 @@ const columns = [
   "Rejected",
 ];
 
+const normalizeStatus = (status) => {
+  if (status === "Interviewing") return "Interview";
+  if (status === "Offered") return "Hired";
+  return status;
+};
+
 export default function KanbanBoard() {
   const [jobs, setJobs] = useState([]);
 
@@ -24,7 +30,12 @@ export default function KanbanBoard() {
       const { data } =
         await API.get("/jobs");
 
-      setJobs(data?.jobs || []);
+      setJobs(
+        (data?.jobs || []).map((job) => ({
+          ...job,
+          status: normalizeStatus(job.status),
+        }))
+      );
     } catch (error) {
       console.error(error);
     }
@@ -162,7 +173,7 @@ export default function KanbanBoard() {
 
                                 <p className="text-gray-600 dark:text-gray-300 mt-1">
                                   {
-                                    job.position
+                                    job.role || job.position
                                   }
                                 </p>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import StatsCard from "../components/StatsCard";
 
-import { jobsApi } from "../api";
+import { jobsApi } from "../api.js";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -12,6 +12,12 @@ import {
   Trophy,
   XCircle,
 } from "lucide-react";
+
+const normalizeStatus = (status) => {
+  if (status === "Interviewing") return "Interview";
+  if (status === "Offered") return "Hired";
+  return status;
+};
 
 export default function Dashboard() {
   const { token } = useAuth();
@@ -38,32 +44,32 @@ export default function Dashboard() {
         const jobs =
           data?.jobs || [];
 
+        const normalizedJobs = jobs.map((job) => ({
+          ...job,
+          status: normalizeStatus(job.status),
+        }));
+
         setRecentJobs(
-          jobs.slice(0, 5)
+          normalizedJobs.slice(0, 5)
         );
 
         setStats({
-          total: jobs.length,
+          total: normalizedJobs.length,
 
           interviews:
-            jobs.filter(
+            normalizedJobs.filter(
               (job) =>
-                job.status ===
-                "Interview"
+                job.status === "Interview"
             ).length,
 
-          hired: jobs.filter(
+          hired: normalizedJobs.filter(
             (job) =>
-              job.status ===
-              "Hired"
+              job.status === "Hired"
           ).length,
 
-          rejected:
-            jobs.filter(
-              (job) =>
-                job.status ===
-                "Rejected"
-            ).length,
+          rejected: normalizedJobs.filter(
+            (job) => job.status === "Rejected"
+          ).length,
         });
       } catch (error) {
         console.error(error);
@@ -159,15 +165,14 @@ export default function Dashboard() {
                   </h3>
 
                   <p className="text-sm text-gray-500">
-                    {job.position}
+                    {job.role || job.position}
                   </p>
                 </div>
 
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium
                   ${
-                    job.status ===
-                    "Hired"
+                    job.status === "Hired"
                       ? "bg-green-100 text-green-700"
                       : job.status ===
                         "Rejected"

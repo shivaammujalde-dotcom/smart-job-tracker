@@ -7,6 +7,12 @@ import EmptyState from "../components/EmptyState";
 import { CSVLink } from "react-csv";
 
 export default function Applications() {
+  const normalizeStatus = (status) => {
+    if (status === "Interviewing") return "Interview";
+    if (status === "Offered") return "Hired";
+    return status;
+  };
+
   const [jobs, setJobs] = useState([]);
 
   const [search, setSearch] =
@@ -40,11 +46,18 @@ export default function Applications() {
 
   // Normalize API response
   const normalizeJobs = (payload) => {
-    if (Array.isArray(payload))
-      return payload;
+    if (Array.isArray(payload)) {
+      return payload.map((job) => ({
+        ...job,
+        status: normalizeStatus(job.status),
+      }));
+    }
 
     if (Array.isArray(payload?.jobs)) {
-      return payload.jobs;
+      return payload.jobs.map((job) => ({
+        ...job,
+        status: normalizeStatus(job.status),
+      }));
     }
 
     return [];
@@ -185,6 +198,11 @@ export default function Applications() {
   // Server-side filtering
   const filteredJobs = safeJobs;
 
+  const exportJobs = filteredJobs.map((job) => ({
+    ...job,
+    role: job.role || job.position,
+  }));
+
   // CSV Headers
   const csvHeaders = [
     {
@@ -192,8 +210,8 @@ export default function Applications() {
       key: "company",
     },
     {
-      label: "Position",
-      key: "position",
+      label: "Role",
+      key: "role",
     },
     {
       label: "Status",
@@ -219,7 +237,7 @@ export default function Applications() {
 
           {/* Export CSV */}
           <CSVLink
-            data={filteredJobs}
+            data={exportJobs}
             headers={csvHeaders}
             filename="job-applications.csv"
             className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg transition-all text-center"
@@ -335,7 +353,7 @@ export default function Applications() {
                     </th>
 
                     <th className="p-4">
-                      Position
+                      Role
                     </th>
 
                     <th className="p-4">
@@ -363,7 +381,7 @@ export default function Applications() {
 
                         {/* Position */}
                         <td className="p-4">
-                          {job.position}
+                          {job.role || job.position}
                         </td>
 
                         {/* Status */}
