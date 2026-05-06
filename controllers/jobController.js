@@ -1,4 +1,6 @@
+import { get } from 'mongoose';
 import Job from '../models/Job.js';
+import router from '../routes/jobRoutes.js';
 
 export const createJob = async (req, res) => {
   try {
@@ -96,4 +98,6 @@ export const deleteJob = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
+
 };
+

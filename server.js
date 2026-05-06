@@ -20,8 +20,6 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes);
 
-connectDB();
-
 app.get('/', (_req, res) => {
   res.send('Smart Job Tracker API is running');
 });
@@ -53,4 +51,3 @@ const startServer = async () => {
 };
 
 startServer();
-
